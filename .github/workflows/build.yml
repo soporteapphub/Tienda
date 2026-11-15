@@ -1,11 +1,19 @@
 name: Compilar APK
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      catalogo_url:
+        description: Enlace de Dropbox de catalogo.json
+        required: true
+      version_code:
+        description: Numero de version de la tienda (1, 2, 3...)
+        required: true
+        default: "1"
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -15,9 +23,35 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: 8.9
+      - name: Poner enlace y version
+        env:
+          URL: ${{ inputs.catalogo_url }}
+          VC: ${{ inputs.version_code }}
+        run: |
+          python3 - <<'PY'
+          import os,re
+          p='app/src/main/java/com/dvdtecno/tienda/MainActivity.java'
+          s=open(p,encoding='utf-8').read()
+          u=os.environ.get('URL','').strip()
+          if u:
+              s=re.sub(r'(CATALOG_URL = ")[^"]*(")',lambda m:m.group(1)+u+m.group(2),s,count=1)
+              open(p,'w',encoding='utf-8').write(s)
+          v=os.environ.get('VC','').strip()
+          if v:
+              t=open('app/build.gradle').read()
+              t=re.sub(r'versionCode \d+','versionCode '+v,t,count=1)
+              open('app/build.gradle','w').write(t)
+          PY
       - run: base64 -d tienda.keystore.b64 > tienda.keystore
       - run: gradle assembleRelease
       - uses: actions/upload-artifact@v4
         with:
           name: Tienda-DVD-Tecno-APK
           path: app/build/outputs/apk/release/*.apk
+      - name: Publicar en Releases
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete "v${{ inputs.version_code }}" --yes --cleanup-tag || true
+          gh release create "v${{ inputs.version_code }}" app/build/outputs/apk/release/app-release.apk --title "Tienda v${{ inputs.version_code }}" --notes "APK de la tienda"
