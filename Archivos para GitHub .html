@@ -1,0 +1,451 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Archivos para GitHub</title>
+<style>:root{--bg:#f4f6fb;--cd:#fff;--tx:#14182b;--mu:#5d6580;--ac:#3b5bfd;--on:#fff;--bd:#dfe3f0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1220;--cd:#1a1e33;--tx:#eef0fa;--mu:#9aa2c4;--ac:#6f86ff;--on:#0b0e1c;--bd:#2a3050;color-scheme:dark}}
+body{margin:0;padding:16px;background:var(--bg);color:var(--tx);font:16px/1.45 system-ui,sans-serif}*{box-sizing:border-box}
+h1{font-size:1.3rem;margin:0 0 6px}ol{padding-left:20px;color:var(--mu)}
+.card{background:var(--cd);border:1px solid var(--bd);border-radius:14px;padding:14px;margin:14px 0;display:grid;gap:8px}
+.n{color:var(--mu);font-size:.8rem}.p{font:600 .95rem ui-monospace,monospace;word-break:break-all}
+.b{padding:13px;border-radius:10px;border:1px solid var(--bd);background:var(--cd);color:var(--tx);font:inherit;font-weight:600}.pr{background:var(--ac);color:var(--on);border-color:var(--ac)}
+textarea,input{width:100%;padding:10px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:12px ui-monospace,monospace}input{font:16px system-ui}
+.box{background:var(--cd);border:1px solid var(--bd);border-radius:14px;padding:14px;display:grid;gap:8px}</style></head><body>
+<h1>Archivos del proyecto</h1>
+<ol><li>En el celular abre github.com en Chrome, menú ⋮ y activa «Sitio de escritorio».</li><li>Crea tu repositorio privado <b>tienda-dvd-tecno</b>.</li><li>Dentro: Add file → Create new file. Pega el <b>nombre</b> en la casilla de nombre (las carpetas se crean solas), pega el <b>contenido</b> y toca Commit changes.</li><li>Repite en el mismo orden. El último (build.yml) inicia la compilación.</li></ol>
+<div class="box"><label for="u"><b>Antes del archivo 6:</b> pega aquí el enlace de Dropbox de tu catalogo.json</label><input id="u" placeholder="https://www.dropbox.com/…"></div>
+<div class="card"><div class="n">Archivo 1 de 10</div><div class="p" id="p1">settings.gradle</div><button class="b" data-c="p1">1. Copiar nombre</button><textarea id="t1" readonly rows="5">pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }
+dependencyResolutionManagement { repositories { google(); mavenCentral() } }
+rootProject.name = &quot;TiendaDvdTecno&quot;
+include &#x27;:app&#x27;
+</textarea><button class="b pr" data-c="t1">2. Copiar contenido</button></div><div class="card"><div class="n">Archivo 2 de 10</div><div class="p" id="p2">build.gradle</div><button class="b" data-c="p2">1. Copiar nombre</button><textarea id="t2" readonly rows="5">plugins { id &#x27;com.android.application&#x27; version &#x27;8.5.2&#x27; apply false }
+</textarea><button class="b pr" data-c="t2">2. Copiar contenido</button></div><div class="card"><div class="n">Archivo 3 de 10</div><div class="p" id="p3">gradle.properties</div><button class="b" data-c="p3">1. Copiar nombre</button><textarea id="t3" readonly rows="5">org.gradle.jvmargs=-Xmx2g
+android.useAndroidX=true
+</textarea><button class="b pr" data-c="t3">2. Copiar contenido</button></div><div class="card"><div class="n">Archivo 4 de 10</div><div class="p" id="p4">app/build.gradle</div><button class="b" data-c="p4">1. Copiar nombre</button><textarea id="t4" readonly rows="5">plugins { id &#x27;com.android.application&#x27; }
+
+android {
+    namespace &#x27;com.dvdtecno.tienda&#x27;
+    compileSdk 34
+    defaultConfig {
+        applicationId &#x27;com.dvdtecno.tienda&#x27;
+        minSdk 21
+        targetSdk 34
+        versionCode 1
+        versionName &#x27;1.0&#x27;
+    }
+    signingConfigs {
+        release {
+            storeFile file(&#x27;../tienda.keystore&#x27;)
+            storePassword &#x27;tienda123&#x27;
+            keyAlias &#x27;tienda&#x27;
+            keyPassword &#x27;tienda123&#x27;
+        }
+    }
+    buildTypes {
+        release { signingConfig signingConfigs.release; minifyEnabled false }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies { implementation &#x27;androidx.core:core:1.13.1&#x27; }
+</textarea><button class="b pr" data-c="t4">2. Copiar contenido</button></div><div class="card"><div class="n">Archivo 5 de 10</div><div class="p" id="p5">app/src/main/AndroidManifest.xml</div><button class="b" data-c="p5">1. Copiar nombre</button><textarea id="t5" readonly rows="5">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
+    &lt;uses-permission android:name=&quot;android.permission.INTERNET&quot; /&gt;
+    &lt;uses-permission android:name=&quot;android.permission.REQUEST_INSTALL_PACKAGES&quot; /&gt;
+    &lt;uses-feature android:name=&quot;android.hardware.touchscreen&quot; android:required=&quot;false&quot; /&gt;
+    &lt;uses-feature android:name=&quot;android.software.leanback&quot; android:required=&quot;false&quot; /&gt;
+
+    &lt;application
+        android:label=&quot;Tienda DVD Tecno&quot;
+        android:icon=&quot;@drawable/banner&quot;
+        android:banner=&quot;@drawable/banner&quot;
+        android:allowBackup=&quot;false&quot;
+        android:theme=&quot;@android:style/Theme.DeviceDefault.NoActionBar&quot;&gt;
+        &lt;activity android:name=&quot;.MainActivity&quot; android:exported=&quot;true&quot;&gt;
+            &lt;intent-filter&gt;
+                &lt;action android:name=&quot;android.intent.action.MAIN&quot; /&gt;
+                &lt;category android:name=&quot;android.intent.category.LAUNCHER&quot; /&gt;
+                &lt;category android:name=&quot;android.intent.category.LEANBACK_LAUNCHER&quot; /&gt;
+            &lt;/intent-filter&gt;
+        &lt;/activity&gt;
+        &lt;provider
+            android:name=&quot;androidx.core.content.FileProvider&quot;
+            android:authorities=&quot;${applicationId}.fp&quot;
+            android:exported=&quot;false&quot;
+            android:grantUriPermissions=&quot;true&quot;&gt;
+            &lt;meta-data android:name=&quot;android.support.FILE_PROVIDER_PATHS&quot; android:resource=&quot;@xml/file_paths&quot; /&gt;
+        &lt;/provider&gt;
+    &lt;/application&gt;
+&lt;/manifest&gt;
+</textarea><button class="b pr" data-c="t5">2. Copiar contenido</button></div><div class="card"><div class="n">Archivo 6 de 10</div><div class="p" id="p6">app/src/main/java/com/dvdtecno/tienda/MainActivity.java</div><button class="b" data-c="p6">1. Copiar nombre</button><textarea id="t6" readonly rows="5" data-main="1">package com.dvdtecno.tienda;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.StateListDrawable;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.SystemClock;
+import android.provider.Settings;
+import android.view.Gravity;
+import android.widget.Button;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import androidx.core.content.FileProvider;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+public class MainActivity extends Activity {
+
+    // &gt;&gt;&gt; CAMBIA ESTO: enlace de Dropbox de tu archivo catalogo.json &lt;&lt;&lt;
+    static final String CATALOG_URL = &quot;PEGA_AQUI_EL_ENLACE_DEL_CATALOGO&quot;;
+
+    LinearLayout tabsRow, list;
+    TextView status;
+    JSONArray apps = new JSONArray();
+    String tab = &quot;Todas&quot;;
+    boolean busy = false;
+    JSONObject self = null;
+
+    @Override
+    protected void onCreate(Bundle b) {
+        super.onCreate(b);
+        LinearLayout root = new LinearLayout(this);
+        root.setOrientation(LinearLayout.VERTICAL);
+        root.setBackgroundColor(0xFF0F1220);
+        root.setPadding(dp(32), dp(20), dp(32), dp(20));
+        root.addView(text(&quot;DVD Tecno · Tienda de aplicaciones&quot;, 26, Color.WHITE));
+        HorizontalScrollView hs = new HorizontalScrollView(this);
+        tabsRow = new LinearLayout(this);
+        hs.addView(tabsRow);
+        LinearLayout.LayoutParams hp = new LinearLayout.LayoutParams(-1, -2);
+        hp.setMargins(0, dp(12), 0, dp(6));
+        root.addView(hs, hp);
+        status = text(&quot;&quot;, 16, 0xFF9AA2C4);
+        root.addView(status);
+        ScrollView sv = new ScrollView(this);
+        list = new LinearLayout(this);
+        list.setOrientation(LinearLayout.VERTICAL);
+        sv.addView(list);
+        root.addView(sv, new LinearLayout.LayoutParams(-1, 0, 1f));
+        setContentView(root);
+        load();
+    }
+
+    int dp(int v) { return (int) (v * getResources().getDisplayMetrics().density); }
+
+    TextView text(String s, int sp, int color) {
+        TextView t = new TextView(this);
+        t.setText(s);
+        t.setTextSize(sp);
+        t.setTextColor(color);
+        return t;
+    }
+
+    GradientDrawable rect(int c) {
+        GradientDrawable g = new GradientDrawable();
+        g.setColor(c);
+        g.setCornerRadius(dp(12));
+        return g;
+    }
+
+    Button btn(String t, android.view.View.OnClickListener l) {
+        Button b = new Button(this);
+        b.setText(t);
+        b.setAllCaps(false);
+        b.setTextColor(Color.WHITE);
+        b.setTextSize(18);
+        b.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
+        b.setPadding(dp(18), dp(12), dp(18), dp(12));
+        StateListDrawable s = new StateListDrawable();
+        s.addState(new int[]{android.R.attr.state_focused}, rect(0xFF3B5BFD));
+        s.addState(new int[]{android.R.attr.state_pressed}, rect(0xFF3B5BFD));
+        s.addState(new int[]{}, rect(0xFF222844));
+        b.setBackground(s);
+        b.setOnClickListener(l);
+        return b;
+    }
+
+    static String fix(String u) {
+        u = u.trim();
+        if (u.contains(&quot;dropbox.com&quot;)) {
+            u = u.replaceAll(&quot;([?&amp;])dl=0&quot;, &quot;$1dl=1&quot;);
+            if (!u.contains(&quot;dl=1&quot;)) u += (u.contains(&quot;?&quot;) ? &quot;&amp;&quot; : &quot;?&quot;) + &quot;dl=1&quot;;
+        }
+        return u;
+    }
+
+    HttpURLConnection open(String u) throws Exception {
+        HttpURLConnection c = (HttpURLConnection) new URL(u).openConnection();
+        c.setConnectTimeout(15000);
+        c.setReadTimeout(30000);
+        c.setInstanceFollowRedirects(true);
+        c.setRequestProperty(&quot;User-Agent&quot;, &quot;Mozilla/5.0&quot;);
+        if (c.getResponseCode() &gt;= 400) throw new Exception(&quot;Error HTTP &quot; + c.getResponseCode());
+        return c;
+    }
+
+    void say(final String s) { runOnUiThread(() -&gt; status.setText(s)); }
+
+    void load() {
+        status.setText(&quot;Cargando catálogo…&quot;);
+        new Thread(() -&gt; {
+            String json;
+            try {
+                HttpURLConnection c = open(fix(CATALOG_URL));
+                ByteArrayOutputStream bo = new ByteArrayOutputStream();
+                try (InputStream in = c.getInputStream()) {
+                    byte[] buf = new byte[8192];
+                    int n;
+                    while ((n = in.read(buf)) &gt; 0) bo.write(buf, 0, n);
+                }
+                json = bo.toString(&quot;UTF-8&quot;);
+                new JSONObject(json); // validar
+                getSharedPreferences(&quot;t&quot;, 0).edit().putString(&quot;c&quot;, json).apply();
+            } catch (Exception e) {
+                json = getSharedPreferences(&quot;t&quot;, 0).getString(&quot;c&quot;, null);
+            }
+            final String j = json;
+            runOnUiThread(() -&gt; show(j));
+        }).start();
+    }
+
+    void show(String j) {
+        try {
+            JSONObject root = new JSONObject(j);
+            apps = root.getJSONArray(&quot;apps&quot;);
+            self = root.optJSONObject(&quot;tienda&quot;);
+            status.setText(&quot;&quot;);
+        } catch (Exception e) {
+            apps = new JSONArray();
+            status.setText(&quot;No se pudo cargar el catálogo. Revisa tu internet.&quot;);
+        }
+        render();
+    }
+
+    void render() {
+        tabsRow.removeAllViews();
+        list.removeAllViews();
+        Set&lt;String&gt; tabs = new LinkedHashSet&lt;&gt;();
+        tabs.add(&quot;Todas&quot;);
+        for (int i = 0; i &lt; apps.length(); i++)
+            tabs.add(apps.optJSONObject(i).optString(&quot;dispositivo&quot;, &quot;Otros&quot;));
+        if (!tabs.contains(tab)) tab = &quot;Todas&quot;;
+        for (final String t : tabs) {
+            Button b = btn((t.equals(tab) ? &quot;● &quot; : &quot;&quot;) + t, v -&gt; { tab = t; render(); });
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-2, -2);
+            lp.setMargins(0, 0, dp(8), 0);
+            tabsRow.addView(b, lp);
+            if (t.equals(tab)) b.requestFocus();
+        }
+        tabsRow.addView(btn(&quot;⟳ Actualizar lista&quot;, v -&gt; load()));
+        int n = 0;
+        try {
+            int mine = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+            if (self != null &amp;&amp; self.optInt(&quot;versionCode&quot;, 0) &gt; mine &amp;&amp; self.optString(&quot;url&quot;).length() &gt; 0) {
+                final JSONObject up = new JSONObject();
+                up.put(&quot;nombre&quot;, &quot;Tienda DVD Tecno&quot;);
+                up.put(&quot;url&quot;, self.optString(&quot;url&quot;));
+                LinearLayout.LayoutParams lu = new LinearLayout.LayoutParams(-1, -2);
+                lu.setMargins(0, dp(6), 0, dp(6));
+                list.addView(btn(&quot;⬆ Hay una versión nueva de la tienda. Toca para actualizar&quot;, v -&gt; download(up)), lu);
+            }
+        } catch (Exception e) { }
+        for (int i = 0; i &lt; apps.length(); i++) {
+            final JSONObject a = apps.optJSONObject(i);
+            if (!tab.equals(&quot;Todas&quot;) &amp;&amp; !a.optString(&quot;dispositivo&quot;, &quot;Otros&quot;).equals(tab)) continue;
+            n++;
+            String txt = a.optString(&quot;nombre&quot;) + &quot;   v&quot; + a.optString(&quot;version&quot;) + &quot;\n&quot; + a.optString(&quot;descripcion&quot;);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
+            lp.setMargins(0, dp(6), 0, dp(6));
+            Button ab = btn(txt, v -&gt; download(a));
+            list.addView(ab, lp);
+            icon(ab, a.optString(&quot;icono&quot;));
+        }
+        if (n == 0 &amp;&amp; status.getText().length() == 0) status.setText(&quot;No hay aplicaciones en esta sección.&quot;);
+    }
+
+    void icon(final Button b, final String url) {
+        if (url.length() == 0) return;
+        new Thread(() -&gt; {
+            File f = new File(getCacheDir(), &quot;i&quot; + Math.abs(url.hashCode()) + &quot;.img&quot;);
+            try {
+                if (!f.exists()) {
+                    HttpURLConnection c = open(fix(url));
+                    try (InputStream in = c.getInputStream(); OutputStream os = new FileOutputStream(f)) {
+                        byte[] buf = new byte[8192];
+                        int n;
+                        while ((n = in.read(buf)) &gt; 0) os.write(buf, 0, n);
+                    }
+                }
+                Bitmap bm = BitmapFactory.decodeFile(f.getPath());
+                if (bm == null) { f.delete(); return; }
+                final Bitmap sm = Bitmap.createScaledBitmap(bm, dp(56), dp(56), true);
+                runOnUiThread(() -&gt; {
+                    b.setCompoundDrawablePadding(dp(14));
+                    b.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(getResources(), sm), null, null, null);
+                });
+            } catch (Exception e) { f.delete(); }
+        }).start();
+    }
+
+    void download(final JSONObject a) {
+        if (busy) return;
+        if (Build.VERSION.SDK_INT &gt;= 26 &amp;&amp; !getPackageManager().canRequestPackageInstalls()) {
+            status.setText(&quot;Activa «Permitir de esta fuente» para esta app y vuelve a tocar la aplicación.&quot;);
+            startActivity(new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse(&quot;package:&quot; + getPackageName())));
+            return;
+        }
+        busy = true;
+        final String name = a.optString(&quot;nombre&quot;);
+        new Thread(() -&gt; {
+            try {
+                File dir = new File(getExternalFilesDir(null), &quot;apks&quot;);
+                dir.mkdirs();
+                File[] old = dir.listFiles();
+                if (old != null) for (File f : old) f.delete();
+                File out = new File(dir, name.replaceAll(&quot;[^A-Za-z0-9_-]&quot;, &quot;_&quot;) + &quot;.apk&quot;);
+                HttpURLConnection c = open(fix(a.optString(&quot;url&quot;)));
+                int total = c.getContentLength();
+                long done = 0, last = 0;
+                try (InputStream in = c.getInputStream(); OutputStream os = new FileOutputStream(out)) {
+                    byte[] buf = new byte[65536];
+                    int n;
+                    while ((n = in.read(buf)) &gt; 0) {
+                        os.write(buf, 0, n);
+                        done += n;
+                        long now = SystemClock.elapsedRealtime();
+                        if (now - last &gt; 500) {
+                            last = now;
+                            say(&quot;Descargando &quot; + name + &quot;… &quot; + (total &gt; 0 ? (done * 100 / total) + &quot;%&quot; : (done / 1048576) + &quot; MB&quot;));
+                        }
+                    }
+                }
+                byte[] head = new byte[2];
+                try (FileInputStream fi = new FileInputStream(out)) { fi.read(head); }
+                if (out.length() &lt; 1000 || head[0] != &#x27;P&#x27; || head[1] != &#x27;K&#x27;)
+                    throw new Exception(&quot;El enlace no entregó un archivo APK. Revisa el enlace.&quot;);
+                say(&quot;Listo. Toca «Instalar» en la pantalla que se abre.&quot;);
+                runOnUiThread(() -&gt; install(out));
+            } catch (Exception e) {
+                say(&quot;Error: &quot; + e.getMessage());
+            } finally {
+                busy = false;
+            }
+        }).start();
+    }
+
+    void install(File f) {
+        Uri u = FileProvider.getUriForFile(this, getPackageName() + &quot;.fp&quot;, f);
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setDataAndType(u, &quot;application/vnd.android.package-archive&quot;);
+        i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
+    }
+}
+</textarea><button class="b pr" data-c="t6">2. Copiar contenido</button></div><div class="card"><div class="n">Archivo 7 de 10</div><div class="p" id="p7">app/src/main/res/xml/file_paths.xml</div><button class="b" data-c="p7">1. Copiar nombre</button><textarea id="t7" readonly rows="5">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;paths&gt;
+    &lt;external-files-path name=&quot;apks&quot; path=&quot;apks/&quot; /&gt;
+&lt;/paths&gt;
+</textarea><button class="b pr" data-c="t7">2. Copiar contenido</button></div><div class="card"><div class="n">Archivo 8 de 10</div><div class="p" id="p8">app/src/main/res/drawable/banner.xml</div><button class="b" data-c="p8">1. Copiar nombre</button><textarea id="t8" readonly rows="5">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;vector xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    android:width=&quot;320dp&quot; android:height=&quot;180dp&quot;
+    android:viewportWidth=&quot;320&quot; android:viewportHeight=&quot;180&quot;&gt;
+    &lt;path android:fillColor=&quot;#0F1220&quot; android:pathData=&quot;M0,0h320v180h-320z&quot; /&gt;
+    &lt;path android:fillColor=&quot;#FFFFFF&quot; android:pathData=&quot;M148,35h24v40h24l-36,36l-36,-36h24z&quot; /&gt;
+    &lt;path android:fillColor=&quot;#3B5BFD&quot; android:pathData=&quot;M110,128h100v14h-100z&quot; /&gt;
+&lt;/vector&gt;
+</textarea><button class="b pr" data-c="t8">2. Copiar contenido</button></div><div class="card"><div class="n">Archivo 9 de 10</div><div class="p" id="p9">tienda.keystore.b64</div><button class="b" data-c="p9">1. Copiar nombre</button><textarea id="t9" readonly rows="5">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
+AicQ
+</textarea><button class="b pr" data-c="t9">2. Copiar contenido</button></div><div class="card"><div class="n">Archivo 10 de 10</div><div class="p" id="p10">.github/workflows/build.yml</div><button class="b" data-c="p10">1. Copiar nombre</button><textarea id="t10" readonly rows="5">name: Compilar APK
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.9
+      - run: base64 -d tienda.keystore.b64 &gt; tienda.keystore
+      - run: gradle assembleRelease
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Tienda-DVD-Tecno-APK
+          path: app/build/outputs/apk/release/*.apk
+</textarea><button class="b pr" data-c="t10">2. Copiar contenido</button></div><script>
+const PH="PEGA_AQUI_EL_ENLACE_DEL_CATALOGO",m=document.querySelector("[data-main]"),orig=m.value;
+document.getElementById("u").addEventListener("input",e=>{m.value=orig.replace(PH,e.target.value.trim()||PH)});
+document.addEventListener("click",async e=>{const b=e.target.closest("[data-c]");if(!b)return;
+const el=document.getElementById(b.dataset.c),t=el.value!==undefined?el.value:el.textContent,o=b.textContent;
+try{await navigator.clipboard.writeText(t)}catch(x){const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();try{document.execCommand("copy")}catch(y){}a.remove()}
+b.textContent="¡Copiado!";setTimeout(()=>b.textContent=o,1500)});
+</script></body></html>
