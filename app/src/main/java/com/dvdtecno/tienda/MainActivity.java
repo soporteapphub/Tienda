@@ -2,6 +2,7 @@ package com.dvdtecno.tienda;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -14,9 +15,11 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.core.content.FileProvider;
@@ -30,7 +33,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 public class MainActivity extends Activity {
@@ -38,12 +44,29 @@ public class MainActivity extends Activity {
     // >>> CAMBIA ESTO: enlace de Dropbox de tu archivo catalogo.json <<<
     static final String CATALOG_URL = "https://www.dropbox.com/scl/fi/5vifpxczn2599a0kc4r3d/catalogo.json?rlkey=ankon8c0iq20l2o4mh6wi9xn5&st=kconzw26&dl=0";
 
+    static final int COLOR_TXT = 0xFFB8C0E8;
+    static final int COLOR_OK = 0xFF4CD98A;
+    static final int COLOR_ERR = 0xFFFF6B6B;
+    static final int COLOR_BAR = 0xFF3B5BFD;
+
     LinearLayout tabsRow, list;
     TextView status;
     JSONArray apps = new JSONArray();
     String tab = "Todas";
     boolean busy = false;
     JSONObject self = null;
+
+    // ----- Estado del panel de progreso (dentro de cada tarjeta) -----
+    static class Holder {
+        LinearLayout panel;
+        TextView txt;
+        ProgressBar bar;
+    }
+    final Map<String, Holder> holders = new HashMap<>();
+    String activeName = null;   // app que se está descargando (o la última)
+    String stText = "";
+    int stPct = 0;              // 0-100, -1 = indeterminado, -2 = sin barra
+    int stColor = COLOR_TXT;
 
     @Override
     protected void onCreate(Bundle b) {
@@ -87,7 +110,7 @@ public class MainActivity extends Activity {
         return g;
     }
 
-    Button btn(String t, android.view.View.OnClickListener l) {
+    Button btn(String t, View.OnClickListener l) {
         Button b = new Button(this);
         b.setText(t);
         b.setAllCaps(false);
@@ -103,6 +126,72 @@ public class MainActivity extends Activity {
         b.setOnClickListener(l);
         return b;
     }
+
+    // Tarjeta = botón de la app + panel de progreso debajo (oculto hasta que se descarga)
+    LinearLayout card(Button b, String name) {
+        LinearLayout c = new LinearLayout(this);
+        c.setOrientation(LinearLayout.VERTICAL);
+        c.addView(b, new LinearLayout.LayoutParams(-1, -2));
+
+        Holder h = new Holder();
+        h.panel = new LinearLayout(this);
+        h.panel.setOrientation(LinearLayout.VERTICAL);
+        h.panel.setBackground(rect(0xFF1A1F38));
+        h.panel.setPadding(dp(18), dp(10), dp(18), dp(12));
+        h.panel.setVisibility(View.GONE);
+
+        h.txt = text("", 15, COLOR_TXT);
+        h.panel.addView(h.txt);
+
+        h.bar = new ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal);
+        h.bar.setMax(100);
+        if (Build.VERSION.SDK_INT >= 21) {
+            h.bar.setProgressTintList(ColorStateList.valueOf(COLOR_BAR));
+            h.bar.setIndeterminateTintList(ColorStateList.valueOf(COLOR_BAR));
+            h.bar.setProgressBackgroundTintList(ColorStateList.valueOf(0xFF33395C));
+        }
+        LinearLayout.LayoutParams bp = new LinearLayout.LayoutParams(-1, dp(8));
+        bp.setMargins(0, dp(8), 0, 0);
+        h.panel.addView(h.bar, bp);
+
+        LinearLayout.LayoutParams pp = new LinearLayout.LayoutParams(-1, -2);
+        pp.setMargins(0, dp(2), 0, 0);
+        c.addView(h.panel, pp);
+
+        holders.put(name, h);
+        return c;
+    }
+
+    void applyState(Holder h) {
+        h.panel.setVisibility(View.VISIBLE);
+        h.txt.setText(stText);
+        h.txt.setTextColor(stColor);
+        if (stPct == -2) {
+            h.bar.setVisibility(View.GONE);
+        } else {
+            h.bar.setVisibility(View.VISIBLE);
+            if (stPct == -1) {
+                h.bar.setIndeterminate(true);
+            } else {
+                h.bar.setIndeterminate(false);
+                h.bar.setProgress(stPct);
+            }
+        }
+    }
+
+    // Se puede llamar desde cualquier hilo
+    void progress(final String name, final String t, final int pct, final int color) {
+        runOnUiThread(() -> {
+            activeName = name;
+            stText = t;
+            stPct = pct;
+            stColor = color;
+            Holder h = holders.get(name);
+            if (h != null) applyState(h);
+        });
+    }
+
+    static String mb(long bytes) { return String.format(Locale.US, "%.1f", bytes / 1048576f); }
 
     static String fix(String u) {
         u = u.trim();
@@ -164,6 +253,7 @@ public class MainActivity extends Activity {
     void render() {
         tabsRow.removeAllViews();
         list.removeAllViews();
+        holders.clear();
         Set<String> tabs = new LinkedHashSet<>();
         tabs.add("Todas");
         for (int i = 0; i < apps.length(); i++)
@@ -186,7 +276,8 @@ public class MainActivity extends Activity {
                 up.put("url", self.optString("url"));
                 LinearLayout.LayoutParams lu = new LinearLayout.LayoutParams(-1, -2);
                 lu.setMargins(0, dp(6), 0, dp(6));
-                list.addView(btn("⬆ Hay una versión nueva de la tienda. Toca para actualizar", v -> download(up)), lu);
+                Button ub = btn("⬆ Hay una versión nueva de la tienda. Toca para actualizar", v -> download(up));
+                list.addView(card(ub, "Tienda DVD Tecno"), lu);
             }
         } catch (Exception e) { }
         for (int i = 0; i < apps.length(); i++) {
@@ -197,8 +288,13 @@ public class MainActivity extends Activity {
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
             lp.setMargins(0, dp(6), 0, dp(6));
             Button ab = btn(txt, v -> download(a));
-            list.addView(ab, lp);
+            list.addView(card(ab, a.optString("nombre")), lp);
             icon(ab, a.optString("icono"));
+        }
+        // Si se redibuja la lista durante una descarga, se restaura el progreso
+        if (activeName != null) {
+            Holder h = holders.get(activeName);
+            if (h != null) applyState(h);
         }
         if (n == 0 && status.getText().length() == 0) status.setText("No hay aplicaciones en esta sección.");
     }
@@ -236,6 +332,10 @@ public class MainActivity extends Activity {
         }
         busy = true;
         final String name = a.optString("nombre");
+        status.setText("");
+        // Oculta paneles de descargas anteriores y muestra el de esta app
+        for (Holder h : holders.values()) h.panel.setVisibility(View.GONE);
+        progress(name, "Conectando…", -1, COLOR_TXT);
         new Thread(() -> {
             try {
                 File dir = new File(getExternalFilesDir(null), "apks");
@@ -244,7 +344,7 @@ public class MainActivity extends Activity {
                 if (old != null) for (File f : old) f.delete();
                 File out = new File(dir, name.replaceAll("[^A-Za-z0-9_-]", "_") + ".apk");
                 HttpURLConnection c = open(fix(a.optString("url")));
-                int total = c.getContentLength();
+                long total = c.getContentLength();
                 long done = 0, last = 0;
                 try (InputStream in = c.getInputStream(); OutputStream os = new FileOutputStream(out)) {
                     byte[] buf = new byte[65536];
@@ -253,9 +353,14 @@ public class MainActivity extends Activity {
                         os.write(buf, 0, n);
                         done += n;
                         long now = SystemClock.elapsedRealtime();
-                        if (now - last > 500) {
+                        if (now - last > 200) {
                             last = now;
-                            say("Descargando " + name + "… " + (total > 0 ? (done * 100 / total) + "%" : (done / 1048576) + " MB"));
+                            if (total > 0) {
+                                int pct = (int) (done * 100 / total);
+                                progress(name, "Descargando… " + pct + "%  ·  " + mb(done) + " / " + mb(total) + " MB", pct, COLOR_TXT);
+                            } else {
+                                progress(name, "Descargando… " + mb(done) + " MB", -1, COLOR_TXT);
+                            }
                         }
                     }
                 }
@@ -263,10 +368,10 @@ public class MainActivity extends Activity {
                 try (FileInputStream fi = new FileInputStream(out)) { fi.read(head); }
                 if (out.length() < 1000 || head[0] != 'P' || head[1] != 'K')
                     throw new Exception("El enlace no entregó un archivo APK. Revisa el enlace.");
-                say("Listo. Toca «Instalar» en la pantalla que se abre.");
+                progress(name, "✓ Descarga completa · Toca «Instalar» en la pantalla que se abre", 100, COLOR_OK);
                 runOnUiThread(() -> install(out));
             } catch (Exception e) {
-                say("Error: " + e.getMessage());
+                progress(name, "✕ Error: " + e.getMessage() + " · Toca la app para reintentar", -2, COLOR_ERR);
             } finally {
                 busy = false;
             }
